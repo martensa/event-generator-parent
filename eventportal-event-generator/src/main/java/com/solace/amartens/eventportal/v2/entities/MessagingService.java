@@ -9,22 +9,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MessagingService {
 	@JsonProperty("id")
 	private String id;
-	@JsonProperty("messagingServiceId")
-	private String messagingServiceId;
-	@JsonProperty("messagingServiceName")
-	private String messagingServiceName;
-	@JsonProperty("supportedProtocols")
-	private List<String> supportedProtocols;
-	@JsonProperty("environmentId")
-	private String environmentId;
-	@JsonProperty("environmentName")
-	private String environmentName;
 	@JsonProperty("eventMeshId")
-	private String eventMeshId;
-	@JsonProperty("eventMeshName")
-	private String eventMeshName;
-	@JsonProperty("solaceCloudMessagingServiceId")
-	private String solaceCloudMessagingServiceId;
+	private String messagingServiceId;
+	@JsonProperty("messagingServiceType")
+	private String messagingServiceType;
+	@JsonProperty("name")
+	private String name;
+	@JsonProperty("messagingServiceConnections")
+	private List<MessagingServiceConnection> messagingServiceConnections;
 
 	public String getId() {
 		return id;
@@ -42,59 +34,27 @@ public class MessagingService {
 		this.messagingServiceId = messagingServiceId;
 	}
 
-	public String getMessagingServiceName() {
-		return messagingServiceName;
+	public String getMessagingServiceType() {
+		return messagingServiceType;
 	}
 
-	public void setMessagingServiceName(String messagingServiceName) {
-		this.messagingServiceName = messagingServiceName;
+	public void setMessagingServiceType(String messagingServiceType) {
+		this.messagingServiceType = messagingServiceType;
 	}
 
-	public List<String> getSupportedProtocols() {
-		return supportedProtocols;
+	public String getName() {
+		return name;
 	}
 
-	public void setSupportedProtocols(List<String> supportedProtocols) {
-		this.supportedProtocols = supportedProtocols;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getEnvironmentId() {
-		return environmentId;
+	public List<MessagingServiceConnection> getMessagingServiceConnections() {
+		return messagingServiceConnections;
 	}
 
-	public void setEnvironmentId(String environmentId) {
-		this.environmentId = environmentId;
-	}
-
-	public String getEnvironmentName() {
-		return environmentName;
-	}
-
-	public void setEnvironmentName(String environmentName) {
-		this.environmentName = environmentName;
-	}
-
-	public String getEventMeshId() {
-		return eventMeshId;
-	}
-
-	public void setEventMeshId(String eventMeshId) {
-		this.eventMeshId = eventMeshId;
-	}
-
-	public String getEventMeshName() {
-		return eventMeshName;
-	}
-
-	public void setEventMeshName(String eventMeshName) {
-		this.eventMeshName = eventMeshName;
-	}
-
-	public String getSolaceCloudMessagingServiceId() {
-		return solaceCloudMessagingServiceId;
-	}
-
-	public void setSolaceCloudMessagingServiceId(String solaceCloudMessagingServiceId) {
-		this.solaceCloudMessagingServiceId = solaceCloudMessagingServiceId;
+	public void setMessagingServiceConnections(List<MessagingServiceConnection> messagingServiceConnections) {
+		this.messagingServiceConnections = messagingServiceConnections;
 	}
 }

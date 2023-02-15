@@ -5,10 +5,7 @@ import com.solace.amartens.eventportal.v2.eventgenerator.handler.SolaceAsyncApiH
 import com.solace.amartens.eventportal.v2.SolaceEventPortalProperties;
 import com.solace.amartens.eventportal.v2.SolaceEventPortalRestClient;
 import com.solace.amartens.eventportal.v2.eventgenerator.publisher.SolaceFakeEventPublisher;
-import com.solacesystems.jms.SolConnectionFactory;
-import com.solacesystems.jms.SolJmsUtility;
 import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.trace.Tracer;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,11 +21,9 @@ import org.springframework.web.client.RestTemplate;
 public class SolaceAutoConfiguration {
 
 	private final SolaceEventPortalProperties eventPortalProperties;
-	private final SolaceEventBrokerProperties eventBrokerProperties;
 
-	public SolaceAutoConfiguration(SolaceEventPortalProperties eventPortalProperties, SolaceEventBrokerProperties eventBrokerProperties) {
+	public SolaceAutoConfiguration(SolaceEventPortalProperties eventPortalProperties) {
 		this.eventPortalProperties = eventPortalProperties;
-		this.eventBrokerProperties = eventBrokerProperties;
 	}
 
 	@Bean
@@ -50,10 +45,11 @@ public class SolaceAutoConfiguration {
 		return solaceAsyncApiHandler;
 	}
 
-	@Bean(value = "solaceFakeEventPublisher", destroyMethod = "close")
+	@Bean(value = "solaceFakeEventPublisher", destroyMethod = "terminate")
 	@ConditionalOnMissingBean
-	public SolaceFakeEventPublisher solaceFakeEventPublisher(SolaceAsyncApiHandler solaceAsyncApiHandler, OpenTelemetry openTelemetry) {
-		SolaceFakeEventPublisher solaceFakeEventPublisher = SolaceFakeEventPublisher.builder().solaceAsyncApiHandler(solaceAsyncApiHandler).solaceEventBrokerProperties(this.eventBrokerProperties).solaceEventGeneratorOpenTelemetry(openTelemetry).build();
+	public SolaceFakeEventPublisher solaceFakeEventPublisher(OpenTelemetry openTelemetry, SolaceAsyncApiHandler solaceAsyncApiHandler) {
+		SolaceFakeEventPublisher solaceFakeEventPublisher = SolaceFakeEventPublisher.builder().openTelemetry(openTelemetry).solaceAsyncApiHandler(solaceAsyncApiHandler).build();
+		solaceFakeEventPublisher.start();
 		return solaceFakeEventPublisher;
 	}
 }

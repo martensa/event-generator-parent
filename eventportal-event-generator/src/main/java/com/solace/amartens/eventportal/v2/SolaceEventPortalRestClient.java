@@ -82,6 +82,12 @@ public class SolaceEventPortalRestClient {
 		return productVersionsEntity.getBody();
 	}
 
+	public DataObject<EventApiProductVersion> getEventApiProductVersionDataObject(String eventApiProductVersionId) {
+		ResponseEntity<DataObject<EventApiProductVersion>> productVersionsEntity = restTemplate.exchange
+				(properties.getEndpoint()+"/api/v2/architecture/eventApiProductVersions/"+eventApiProductVersionId+"?include=parent", HttpMethod.GET, new HttpEntity<String>(createHeaders()), new ParameterizedTypeReference<DataObject<EventApiProductVersion>>(){});
+		return productVersionsEntity.getBody();
+	}
+
 	public AsyncAPI getEventApiVersionsAsyncApi(String eventApiVersion, String eventApiProductVersionId, String planId, List<GatewayMessagingService> gatewayMessagingServices) {
 		ResponseEntity<String> asyncApiEntity = restTemplate.exchange
 				(properties.getEndpoint()+"/api/v2/architecture/eventApiVersions/"+eventApiVersion+"/asyncApi?showVersioning=true&format=json&includedExtensions=all&version=2.5.0&eventApiProductVersionId="+eventApiProductVersionId+"&planId="+planId+generateParameterFromList("gatewayMessagingServiceIds",gatewayMessagingServices.stream().map(GatewayMessagingService::getId).collect(Collectors.toList())), HttpMethod.GET, new HttpEntity<String>(createHeaders()), String.class);
@@ -129,12 +135,23 @@ public class SolaceEventPortalRestClient {
 		return eventApiProductId;
 	}
 
-	public EventApiProductVersion getEventApiProductVersion(String eventApiProductId) throws EventPortalEntityIsNotFoundException {
+	public EventApiProductVersion getEventApiProductVersion(String eventApiProductVersionId) throws EventPortalEntityIsNotFoundException {
+		DataObject<EventApiProductVersion> eventApiProductVersionDataObject = getEventApiProductVersionDataObject(eventApiProductVersionId);
+		EventApiProductVersion eventApiProductVersion = eventApiProductVersionDataObject.getData();
+
+		if (eventApiProductVersion == null) {
+			throw new EventPortalEntityIsNotFoundException("Event Api Product Version is not found.");
+		}
+
+		return eventApiProductVersion;
+	}
+
+	public EventApiProductVersion getEventApiProductVersionByEventApiProduct(String eventApiProductId, String eapVersion) throws EventPortalEntityIsNotFoundException {
 		DataArray<EventApiProductVersion> eventApiProductVersionDataArray = getEventApiProductVersions(eventApiProductId);
 		EventApiProductVersion eventApiProductVersion = null;
 		if (!eventApiProductVersionDataArray.getData().isEmpty()) {
 			for (EventApiProductVersion productVersion: eventApiProductVersionDataArray.getData()) {
-				if (productVersion.getVersion().equals(this.properties.getEventApiProduct().getVersion())) {
+				if (productVersion.getVersion().equals(eapVersion)) {
 					eventApiProductVersion = productVersion;
 				}
 			}
@@ -150,7 +167,7 @@ public class SolaceEventPortalRestClient {
 	public List<AsyncAPI> getEventApiVersionsAsyncApis() throws Exception {
 		String applicationDomainId = getApplicationDomainId(this.properties.getApplicationDomain().getName());
 		String eventApiProductId = getEventApiProductId(this.properties.getEventApiProduct().getName(), applicationDomainId);
-		EventApiProductVersion eventApiProductVersion = getEventApiProductVersion(eventApiProductId);
+		EventApiProductVersion eventApiProductVersion = getEventApiProductVersionByEventApiProduct(eventApiProductId, this.properties.getEventApiProduct().getVersion());
 		if (eventApiProductVersion.getEventApiVersionIds().isEmpty()) {
 			throw new EventPortalEntityIsMissingException("Event Api is missing.");
 		}

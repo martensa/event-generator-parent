@@ -1,6 +1,7 @@
 package com.solace.amartens.eventportal.v2.eventgenerator.handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,12 @@ import com.arkea.asyncapi.v2.models.messages.Message;
 import com.arkea.asyncapi.v2.models.parameters.Parameter;
 import com.arkea.asyncapi.v2.models.servers.Server;
 import com.solace.amartens.eventportal.v2.SolaceEventPortalRestClient;
+import com.solace.amartens.eventportal.v2.entities.CustomAttribute;
 import com.solace.amartens.eventportal.v2.entities.DataObject;
 import com.solace.amartens.eventportal.v2.entities.EventApiProductVersion;
 import com.solace.amartens.eventportal.v2.entities.EventVersion;
 import com.solace.amartens.eventportal.v2.entities.MessagingService;
+import com.solace.amartens.eventportal.v2.entities.MessagingServiceConnection;
 import com.solace.amartens.eventportal.v2.entities.SchemaVersion;
 
 public class SolaceAsyncApiHandler {
@@ -88,14 +91,34 @@ public class SolaceAsyncApiHandler {
 			catch (Exception e) {
 				throw new RuntimeException(e);
 			}
+
+			for (CustomAttribute customAttribute : eventVersionDataObject.getData().getCustomAttributes()) {
+				if (customAttribute.getName().equals("mapSchemaPropertiesToHeader")) {
+					String[] splits = customAttribute.getValue().split(" ");
+					List<String> mapping = new ArrayList<String>();
+					for (int i=0; i < splits.length; i++) {
+						mapping.add(splits[i]);
+					}
+					event.setMapSchemaPropertiesToHeader(mapping);
+				}
+				if (customAttribute.getName().equals("mapSchemaPropertiesToSpan")) {
+					String[] splits = customAttribute.getValue().split(" ");
+					List<String> mapping = new ArrayList<String>();
+					for (int i=0; i < splits.length; i++) {
+						mapping.add(splits[i]);
+					}
+					event.setMapSchemaPropertiesToSpan(mapping);
+				}
+			}
+
 			event.setPayloadSchema(schemaVersionDataObject.getData().getContent());
 		}
 
 		return fakeEvents;
 	}
 
-	public List<MessagingService> getMessagingServices() {
-		List<MessagingService> messagingServices = new ArrayList<MessagingService>();
+	public Map<String,MessagingServiceConnection> getMessagingServiceConnections() {
+		Map<String,MessagingServiceConnection> messagingServiceConnections = new HashMap<String,MessagingServiceConnection>();
 		for (AsyncAPI asyncApi : asyncApis) {
 			String eventApiProductVersionId = asyncApi.getInfo().getExtensions().get("x-ep-event-api-product-version-id").toString();
 			EventApiProductVersion eventApiProductVersion = null;
@@ -107,10 +130,15 @@ public class SolaceAsyncApiHandler {
 			catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-			messagingServices.addAll(services);
+
+			for (MessagingService service : services) {
+				for (MessagingServiceConnection connection : service.getMessagingServiceConnections()) {
+					messagingServiceConnections.put(connection.getName().toLowerCase().replace(" ","_")+"-"+connection.getProtocol(),connection);
+				}
+			}
 		}
 
-		return messagingServices;
+		return messagingServiceConnections;
 	}
 
 	public static class Builder {

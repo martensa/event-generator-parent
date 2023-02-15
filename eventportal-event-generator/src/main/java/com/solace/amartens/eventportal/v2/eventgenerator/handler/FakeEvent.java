@@ -1,6 +1,7 @@
 package com.solace.amartens.eventportal.v2.eventgenerator.handler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ public class FakeEvent {
 	Map<String, List<?>> topicParameterEnums;
 	String contentType;
 	String eventVersionId;
+	List<String> mapSchemaPropertiesToHeader;
+	List<String> mapSchemaPropertiesToSpan;
 	List<String> messagingServiceConnections;
 	String payloadSchema;
 	JsonElement payload;
@@ -60,6 +63,22 @@ public class FakeEvent {
 
 	public void setMessagingServiceConnections(List<String> messagingServiceConnections) {
 		this.messagingServiceConnections = messagingServiceConnections;
+	}
+
+	public List<String> getMapSchemaPropertiesToHeader() {
+		return mapSchemaPropertiesToHeader;
+	}
+
+	public void setMapSchemaPropertiesToHeader(List<String> mapSchemaPropertiesToHeader) {
+		this.mapSchemaPropertiesToHeader = mapSchemaPropertiesToHeader;
+	}
+
+	public List<String> getMapSchemaPropertiesToSpan() {
+		return mapSchemaPropertiesToSpan;
+	}
+
+	public void setMapSchemaPropertiesToSpan(List<String> mapSchemaPropertiesToSpan) {
+		this.mapSchemaPropertiesToSpan = mapSchemaPropertiesToSpan;
 	}
 
 	public String getPayloadSchema() {
