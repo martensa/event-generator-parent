@@ -143,7 +143,6 @@ public class SolaceFakeEventPublisher {
 			this.fakeEvents = fakeEvents;
 		}
 
-		//@WithSpan
 		public void sendNewFakeEvent() {
 			for (FakeEvent event : this.fakeEvents) {
 				event.generateNewFakerEventInstance();

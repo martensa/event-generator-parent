@@ -10,6 +10,7 @@
 	<modules>
 		<module>asyncapi-parser</module>
 		<module>eventportal-event-generator</module>
+		<module>event-consumer</module>
 	</modules>
 
 	<properties>
