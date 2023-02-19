@@ -11,12 +11,15 @@
 		<module>asyncapi-parser</module>
 		<module>eventportal-event-generator</module>
 		<module>event-consumer</module>
+		<module>event-transformer</module>
+		<module>eventportal-rest-api-client</module>
 	</modules>
 
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>17</java.version>
 	</properties>
 
 	<packaging>pom</packaging>

@@ -1,7 +1,6 @@
 package com.solace.amartens.eventportal.v2.eventgenerator.handler;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +122,7 @@ public class FakeEvent {
 				String topicLevel = null;
 				Iterator<Map.Entry<String, JsonElement>> elements = this.payload.asJsonObject().iterator();
 				while (elements.hasNext()) {
-					Map.Entry<String, JsonElement> entry = (Map.Entry<String, JsonElement>) elements.next();
+					Map.Entry<String, JsonElement> entry = elements.next();
 					if (topicLevelName.toLowerCase().startsWith(entry.getKey().toLowerCase())) {
 						JsonElement element = entry.getValue();
 						topicLevel = element.toString();

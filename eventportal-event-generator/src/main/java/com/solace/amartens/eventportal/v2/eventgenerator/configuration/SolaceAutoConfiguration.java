@@ -1,6 +1,5 @@
 package com.solace.amartens.eventportal.v2.eventgenerator.configuration;
 
-import com.solace.amartens.eventportal.v2.SolaceEventBrokerProperties;
 import com.solace.amartens.eventportal.v2.eventgenerator.handler.SolaceAsyncApiHandler;
 import com.solace.amartens.eventportal.v2.SolaceEventPortalProperties;
 import com.solace.amartens.eventportal.v2.SolaceEventPortalRestClient;
@@ -17,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableScheduling
-@EnableConfigurationProperties({SolaceEventPortalProperties.class, SolaceEventBrokerProperties.class})
+@EnableConfigurationProperties({SolaceEventPortalProperties.class})
 public class SolaceAutoConfiguration {
 
 	private final SolaceEventPortalProperties eventPortalProperties;
