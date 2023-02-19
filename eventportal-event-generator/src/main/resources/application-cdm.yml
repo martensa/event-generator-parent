@@ -1,0 +1,22 @@
+solace:
+  publisher.scheduled.fixedRate.in.milliseconds: 1000
+  event.portal.endpoint: https://api.solace.cloud
+  event.portal.token: eyJhbGciOiJSUzI1NiIsImtpZCI6Im1hYXNfcHJvZF8yMDIwMDMyNiIsInR5cCI6IkpXVCJ9.eyJvcmciOiJzZWFsbCIsIm9yZ1R5cGUiOiJFTlRFUlBSSVNFIiwic3ViIjoienBmc2YxeDR2b3oiLCJwZXJtaXNzaW9ucyI6IkFBQUFBSUFQQUFBQWZ6Z0E0QUVBQUFBQUFBQUFBQUFBQUlDeHpvY2hJQWpnTC8vL2c1WGZCZDREV1BNRDY0ZS9Qdz09IiwiYXBpVG9rZW5JZCI6ImV0Zmh1em1zNGN6IiwiaXNzIjoiU29sYWNlIENvcnBvcmF0aW9uIiwiaWF0IjoxNjc0NzM1OTA3fQ.mQJ3uhTH190BWR1gSGxMzs9PotOyrFuqhZUgNf-a1fg8fgaQG4d4oncOfpcjRYxe9De2nW17du2D9nQXp_uDTNc_L2U5NglNNHrIdOdDFKxoKx23TfNl9-514NkT99bwtR7V9NHmeDZq58DTGekkjdCUYtibaXX0LSzNmU7jl6q2fxY_ypdO5T0Unt2lzzPsq00WJqJ5fSWm_3fp5GgGAHJaRDV6w3w-yHDMV4gu-1Qxb_JLlhhAROWVxMpXqAmh_xGjfiqKRzvt140nhBzMcg9ZsEAaj2hkrTmKcVSscidJfo6Nch--peVtKYjdcbHw3jveG89_xnGrM_FHo4SKOA
+  event.portal.applicationDomain.name: EF - Customer Data Management
+  event.portal.eventApiProduct.name: CDM Customer Characteristics Event API Product
+  event.portal.eventApiProduct.version: 0.1.0
+  event.portal.plan.name: Guaranteed Customer Characteristics Events
+spring:
+  task.scheduling.pool.size: 5
+  thymeleaf.cache: false
+logging:
+  level:
+    org.springframework: INFO
+    io.opentelemetry: DEBUG
+server:
+  port: 8050
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
